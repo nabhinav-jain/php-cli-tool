@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+// list of commands to replace with input
+$lists = [
+  "list"       => "ls",
+  "cd"         => "cd",
+  "present_directory" => "pwd",
+  "copy"       => "cp",
+  "move"       => "mv",
+  "delete"     => "rm",
+  "remove"     => "rm",
+  "make_directory"   => "mkdir",
+  "remove_dir" => "rmdir",
+  "touch"      => "touch",
+  "cat"        => "cat",
+  "head"       => "head",
+  "tail"       => "tail",
+  "find"       => "find",
+  "grep"       => "grep",
+  "echo"       => "echo",
+  "chmod"      => "chmod",
+  "chown"      => "chown",
+  "df"         => "df",
+  "du"         => "du",
+  "ps"         => "ps",
+  "kill"       => "kill",
+  "top"        => "top",
+  "whoami"     => "whoami",
+  "ifconfig"   => "ifconfig",
+  "df"         => "df",
+];
+
+
+$argv[1] = $lists[$argv[1]];
+
+if($argv[1]==="mv" || $argv[1]==="cp"){
+   foreach($argv as $key => $value){
+        if(strtolower($value)==="to"){
+          unset($argv[$key]);
+        }
+   }
+}
+
+$command = $argv[1];
+$flags = [];
+for($i = 2 ; $i<$argc;$i++){
+    if(isset($argv[$i])){
+      $flags []=$argv[$i];
+    }
+}
+
+$flags = implode(" ",$flags);
+
+
+$output = shell_exec($command." ".$flags);
+echo $output;
