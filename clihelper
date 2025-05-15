@@ -11,7 +11,7 @@ $lists = [
   "delete"     => "rm",
   "remove"     => "rm",
   "make_directory"   => "mkdir",
-  "remove_dir" => "rmdir",
+  "remove_directory" => "rmdir",
   "touch"      => "touch",
   "cat"        => "cat",
   "head"       => "head",
@@ -31,27 +31,35 @@ $lists = [
   "df"         => "df",
 ];
 
+$flags = [];
+for ($i = 2; $i < $argc; $i++) {
+  if (isset($argv[$i])) {
+    $flags[] = $argv[$i];
+  }
+}
 
-$argv[1] = $lists[$argv[1]];
+$flags = implode(" ", $flags);
 
-if($argv[1]==="mv" || $argv[1]==="cp"){
-   foreach($argv as $key => $value){
-        if(strtolower($value)==="to"){
-          unset($argv[$key]);
-        }
-   }
+//this change happen before giving short command to argv
+if ($argv[1] === 'delete' && is_dir($argv[2])) {
+ $argv[1] = "rmdir";
+} else {
+  $argv[1] = $lists[$argv[1]];
+}
+
+
+
+if ($argv[1] === "mv" || $argv[1] === "cp") {
+  foreach ($argv as $key => $value) {
+    if (strtolower($value) === "to") {
+      unset($argv[$key]);
+    }
+  }
 }
 
 $command = $argv[1];
-$flags = [];
-for($i = 2 ; $i<$argc;$i++){
-    if(isset($argv[$i])){
-      $flags []=$argv[$i];
-    }
-}
-
-$flags = implode(" ",$flags);
 
 
-$output = shell_exec($command." ".$flags);
+
+$output = shell_exec($command . " " . $flags);
 echo $output;
