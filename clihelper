@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-
-// list of commands to replace with input
+unset($argv[0]);
+// list of commands to replace with input will put in seperate file
 $lists = [
   "list"       => "ls",
   "cd"         => "cd",
@@ -18,7 +18,7 @@ $lists = [
   "head"       => "head",
   "tail"       => "tail",
   "find"       => "find",
-  "grep"       => "grep",
+  "search"       => "grep",
   "echo"       => "echo",
   "chmod"      => "chmod",
   "chown"      => "chown",
@@ -34,19 +34,37 @@ $lists = [
 
 $flags = [];
 for ($i = 2; $i < $argc; $i++) {
-  if (isset($argv[$i])) {
+  if (isset($argv[$i]) && ($argv[$i][0]=="-" ||$argv[$i][0]=="--") ) {
     $flags[] = $argv[$i];
+    unset($argv[$i]);
   }
 }
 
 $flags = implode(" ", $flags);
-
-//this change happen before giving short command to argv
+$pattern ='';
+$paths = '';
+//this if change happen before giving short command to argv
 if ($argv[1] === 'delete' && is_dir($argv[2])) {
  $argv[1] = "rmdir";
 } else {
   $argv[1] = $lists[$argv[1]];
 }
+ 
+ if($argv[1]=="grep"){
+    $patternFlag = false;
+    for($i = 2; $i< $argc ; $i++){
+       if(isset($argv[$i]) && $patternFlag==false ) {
+        $patternFlag=true;
+        $pattern = $argv[$i];
+        
+        
+       }
+        else if(isset($argv[$i]) &&$patternFlag==true && $argv[$i]!='in'){
+         $paths .= " ".$argv[$i];
+         
+       }
+    }
+} 
 
 
 
@@ -62,5 +80,5 @@ $command = $argv[1];
 
 
 
-$output = shell_exec($command . " " . $flags);
+$output = shell_exec($command . " " . $flags." ".$pattern." ".$paths);
 echo $output;
