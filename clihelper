@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-unset($argv[0]);
+
 // list of commands to replace with input will put in seperate file
 $lists = [
   "list"       => "ls",
@@ -36,7 +36,7 @@ $flags = [];
 for ($i = 2; $i < $argc; $i++) {
   if (isset($argv[$i]) && ($argv[$i][0]=="-" ||$argv[$i][0]=="--") ) {
     $flags[] = $argv[$i];
-    unset($argv[$i]);
+    
   }
 }
 
@@ -49,7 +49,6 @@ if ($argv[1] === 'delete' && is_dir($argv[2])) {
 } else {
   $argv[1] = $lists[$argv[1]];
 }
- 
  if($argv[1]=="grep"){
     $patternFlag = false;
     for($i = 2; $i< $argc ; $i++){
@@ -66,19 +65,33 @@ if ($argv[1] === 'delete' && is_dir($argv[2])) {
     }
 } 
 
-
-
-if ($argv[1] === "mv" || $argv[1] === "cp") {
+else if ($argv[1] === "mv" || $argv[1] === "cp") {
   foreach ($argv as $key => $value) {
     if (strtolower($value) === "to") {
       unset($argv[$key]);
     }
   }
+}else if ($argv[1] === 'touch' || $argv[1] === 'rm') {
+  $pattern = '';
+
+  for ($i = 2; $i < $argc; $i++) {
+      $pattern .= ' ' . $argv[$i];
+  }  
 }
 
 $command = $argv[1];
 
 
-
-$output = shell_exec($command . " " . $flags." ".$pattern." ".$paths);
-echo $output;
+$pattern = trim($pattern);
+$paths = trim($paths);
+$output = $command;
+if(isset($flag)){
+   $output .= $command." ".$flags;
+}
+if(isset($pattern)){
+  $output .= " ".$pattern;
+}
+if(isset($paths)){
+  $output.= " ".$paths;
+}
+echo shell_exec($output);
