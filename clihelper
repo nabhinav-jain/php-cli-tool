@@ -78,7 +78,13 @@ else if ($argv[1] === "mv" || $argv[1] === "cp") {
 
  
   
-}else if ($argv[1] === 'touch' || $argv[1] === 'rm') {
+}else if ($argv[1] === 'touch' || $argv[1] === 'rm' ) {
+  $pattern = '';
+
+  for ($i = 2; $i < $argc; $i++) {
+      $pattern .= ' ' . $argv[$i];
+  }  
+}else{
   $pattern = '';
 
   for ($i = 2; $i < $argc; $i++) {
