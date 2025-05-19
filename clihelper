@@ -67,10 +67,12 @@ if ($argv[1] === 'delete' && is_dir($argv[2])) {
 
 else if ($argv[1] === "mv" || $argv[1] === "cp") {
   foreach ($argv as $key => $value) {
+   
     if (strtolower($value) === "to") {
       unset($argv[$key]);
     }
   }
+  
 }else if ($argv[1] === 'touch' || $argv[1] === 'rm') {
   $pattern = '';
 
@@ -85,6 +87,7 @@ $command = $argv[1];
 $pattern = trim($pattern);
 $paths = trim($paths);
 $output = $command;
+
 if(isset($flag)){
    $output .= $command." ".$flags;
 }
@@ -94,4 +97,4 @@ if(isset($pattern)){
 if(isset($paths)){
   $output.= " ".$paths;
 }
-echo shell_exec($output);
+echo ($output);
