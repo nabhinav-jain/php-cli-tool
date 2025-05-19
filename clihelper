@@ -24,7 +24,7 @@ $lists = [
   "chown"      => "chown",
   "df"         => "df",
   "du"         => "du",
-  "ps"         => "ps",
+  "process"         => "ps",
   "kill"       => "kill",
   "top"        => "top",
   "whoami"     => "whoami",
@@ -47,7 +47,10 @@ $paths = '';
 if ($argv[1] === 'delete' && is_dir($argv[2])) {
  $argv[1] = "rmdir";
 } else {
-  $argv[1] = $lists[$argv[1]];
+  if(isset($lists[$argv[1]])){
+    $argv[1] = $lists[$argv[1]];
+
+  }
 
 }
  if($argv[1]=="grep"){

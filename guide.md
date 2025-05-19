@@ -11,3 +11,10 @@ php clihelper move index2.txt to test
 php clihelper delete test 
 
 php clihelper delete index.txt
+
+php clihelper process aux
+
+php clihelper process
+
+php clihelper process -ef
+
